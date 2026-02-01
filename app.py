@@ -67,3 +67,4 @@ if st.button("Calculate Carbon Impact"):
 # Footer
 st.markdown("---")
 st.caption("Biochar calculator – estimation tool")
+st.markdown("💡 Made with ❤️ by **Mayank Kumar Sharma**")
