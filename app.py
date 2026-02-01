@@ -2,14 +2,18 @@ import streamlit as st
 
 st.set_page_config(page_title="Biochar Carbon Calculator", layout="centered")
 
+# -----------------------------
+# Header
+# -----------------------------
 st.title("🌱 Biochar Carbon Credit Calculator")
+st.markdown("Estimate **stable carbon storage** and **CO₂ removal potential** from biochar.")
 
-st.write("Estimate stable carbon and CO₂ removal from biochar.")
+st.divider()
 
 # -----------------------------
 # Constants
 # -----------------------------
-BIOCHAR_MASS = 1  # tonne
+BIOCHAR_MASS = 1
 CO2_CONVERSION = 3.67
 EMISSION_DEDUCTION = 0.15
 
@@ -34,37 +38,57 @@ data = {
 }
 
 # -----------------------------
-# Inputs
+# Inputs Section
 # -----------------------------
-feedstock = st.selectbox("Select Feedstock", list(data.keys()))
-production = st.radio("Production Type", ["Industrial", "Artisanal"])
+st.subheader("🔧 Input Parameters")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    feedstock = st.selectbox("🌾 Feedstock Type", list(data.keys()))
+
+with col2:
+    production = st.radio("🏭 Production Method", ["Industrial", "Artisanal"])
 
 prod_key = production.lower()
+
+st.divider()
 
 # -----------------------------
 # Button
 # -----------------------------
-if st.button("Calculate Carbon Impact"):
+if st.button("🚀 Calculate Carbon Impact"):
 
     c_frac, stable_frac = data[feedstock][prod_key]
 
-    # Calculations
     stable_carbon = BIOCHAR_MASS * c_frac * stable_frac
     gross_co2 = stable_carbon * CO2_CONVERSION
     net_credits = gross_co2 * (1 - EMISSION_DEDUCTION)
 
     st.subheader("📊 Results")
 
-    st.write(f"**Carbon fraction used:** {c_frac}")
-    st.write(f"**Stable carbon fraction used:** {stable_frac}")
+    # Metrics Row
+    c1, c2, c3 = st.columns(3)
 
-    st.success(f"🌿 Stable carbon stored: **{stable_carbon:.2f} tonnes C**")
-    st.success(f"🌍 Gross CO₂ removed: **{gross_co2:.2f} tCO₂e**")
-    st.success(f"💰 Net carbon credits: **{net_credits:.2f} tCO₂e**")
+    c1.metric("🌿 Stable Carbon", f"{stable_carbon:.2f} t C")
+    c2.metric("🌍 CO₂ Removed", f"{gross_co2:.2f} tCO₂e")
+    c3.metric("💰 Net Credits", f"{net_credits:.2f} tCO₂e")
 
-    st.info("Assumptions: 1 tonne biochar, CO₂/C=3.67, 15% emission deduction.")
+    st.divider()
 
+    # Details Expander
+    with st.expander("📘 Calculation Details"):
+        st.write(f"**Carbon fraction used:** {c_frac}")
+        st.write(f"**Stable carbon fraction:** {stable_frac}")
+        st.write(f"**Biochar mass assumed:** {BIOCHAR_MASS} tonne")
+        st.write(f"**CO₂ conversion factor:** 3.67")
+        st.write(f"**Emission deduction:** 15%")
+
+    st.success("✅ Calculation complete!")
+
+# -----------------------------
 # Footer
-st.markdown("---")
-st.caption("Biochar calculator – estimation tool")
+# -----------------------------
+st.divider()
+st.caption("Biochar MRV Calculator | Demo Tool 🌱")
 st.markdown("💡 Made with ❤️ by **Mayank Kumar Sharma**")
