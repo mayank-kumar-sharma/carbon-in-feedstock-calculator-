@@ -45,10 +45,10 @@ st.subheader("🔧 Input Parameters")
 col1, col2 = st.columns(2)
 
 with col1:
-    feedstock = st.selectbox("🌾 Feedstock Type", list(data.keys()))
+    feedstock = st.selectbox("Feedstock Type", list(data.keys()))
 
 with col2:
-    production = st.radio("🏭 Production Method", ["Industrial", "Artisanal"])
+    production = st.radio("Production Method", ["Industrial", "Artisanal"])
 
 prod_key = production.lower()
 
@@ -57,7 +57,7 @@ st.divider()
 # -----------------------------
 # Button
 # -----------------------------
-if st.button("🚀 Calculate Carbon Impact"):
+if st.button("Calculate Carbon Impact"):
 
     c_frac, stable_frac = data[feedstock][prod_key]
 
